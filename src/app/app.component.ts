@@ -5,6 +5,9 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { TabsPage } from '../pages/tabs/tabs';
 
+import * as firebase from 'firebase';
+import { environment } from '../environments/environment';
+
 @Component({
   templateUrl: 'app.html'
 })
@@ -17,6 +20,8 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
       splashScreen.hide();
+
+      firebase.initializeApp(environment.config);
     });
   }
 }
