@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import * as firebase from 'firebase';
 
 /**
  * Generated class for the AddStockPage page.
@@ -29,6 +30,12 @@ export class AddStockPage {
   registStock() {
     console.log('registStock');
     console.log(this.data);
+
+    firebase.database().ref('stocks/').push({
+        name: this.data.name,
+        space: this.data.space,
+        usage: 0
+    });
 
     this.navCtrl.pop();
   }

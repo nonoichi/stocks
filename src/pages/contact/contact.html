@@ -1,17 +1,25 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>
-      Contact
-    </ion-title>
+    <ion-title>かったもの</ion-title>
+    <ion-buttons start>
+      <button ion-button icon-only (click)="addStock()">
+        <ion-icon name="add"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
-  <ion-list>
+  <!-- <ion-list>
     <ion-list-header>Follow us on Twitter</ion-list-header>
     <ion-item>
       <ion-icon name="ionic" item-start></ion-icon>
       @ionicframework
     </ion-item>
+  </ion-list> -->
+  <ion-list>
+    <button ion-item *ngFor="let item of items" (click)="itemSelected(item)">
+      [{{ item.space }}] {{ item.name }}
+    </button>
   </ion-list>
 </ion-content>

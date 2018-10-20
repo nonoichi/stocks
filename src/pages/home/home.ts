@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { Component, ViewChild, OnInit } from '@angular/core';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { ActionSheetController } from 'ionic-angular';
+import * as firebase from 'firebase';
 import { AddStockPage } from '../add-stock/add-stock';
 
 @Component({
@@ -9,11 +10,38 @@ import { AddStockPage } from '../add-stock/add-stock';
 })
 export class HomePage {
 
-  public items: string[] = ['キャベツ', 'りんご', 'みかん', 'ピーマン'];
+  // public items: string[] = ['キャベツ', 'りんご', 'みかん', 'ピーマン'];
+  public items: string[] = [];
 
-  constructor(public navCtrl: NavController, public actionSheetCtrl: ActionSheetController) {
-
+  // constructor(public navCtrl: NavController, public actionSheetCtrl: ActionSheetController) {
+  constructor(public navCtrl: NavController,
+     public navParams: NavParams,
+     public actionSheetCtrl: ActionSheetController
+     ) {
   }
+
+  // ngOnInit() {
+  //   console.log('aa');
+
+  //   // var ref = firebase.database().ref("stocks");
+  //   // ref.once("value")
+  //   //   .then(function (snapshot) {
+  //   //     console.log(snapshot);
+  //   //     // var name = snapshot.child("name").val(); // {first:"Ada",last:"Lovelace"}
+
+  //   // });
+  //   // firebase.database().ref('stocks/').on('value', resp => {
+  //   //   console.log(resp);
+  //   //   // if (resp) {
+  //   //   //   this.items = [];
+  //   //   //   resp.forEach(childSnapshot => {
+  //   //   //     const item = childSnapshot.val();
+  //   //   //     item.key = childSnapshot.key;
+  //   //   //     this.items.push(item);
+  //   //   //   });
+  //   //   // }
+  //   // });
+  // }
 
   addStock() {
     this.navCtrl.push('AddStockPage');
