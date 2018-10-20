@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
+import { AddStockPage } from '../add-stock/add-stock';
 
 @Component({
   selector: 'page-home',
@@ -11,4 +12,7 @@ export class HomePage {
 
   }
 
+  addStock() {
+    this.navCtrl.push('AddStockPage');
+  }
 }
