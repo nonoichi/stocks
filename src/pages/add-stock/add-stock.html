@@ -14,5 +14,20 @@
 
 
 <ion-content padding>
+  <form>
+    <ion-list>
+      <ion-item>
+        <ion-label>しょうひん名</ion-label>
+        <ion-input type="text" name="name" [(ngModel)]="data.name"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>おいたところ</ion-label>
+        <ion-select name="space" [(ngModel)]="data.space">
+          <ion-option *ngFor="let s of spaces" [value]="s">{{ s }}</ion-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+    <button ion-button full (click)="registStock()">とうろく</button>
+  </form>
 
 </ion-content>

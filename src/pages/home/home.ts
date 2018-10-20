@@ -8,6 +8,8 @@ import { AddStockPage } from '../add-stock/add-stock';
 })
 export class HomePage {
 
+  public items: string[] = ['キャベツ', 'りんご', 'みかん', 'ピーマン'];
+
   constructor(public navCtrl: NavController) {
 
   }

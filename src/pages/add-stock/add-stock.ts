@@ -15,11 +15,23 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class AddStockPage {
 
+  public spaces: string[] = ['れいぞうこ', 'ちょぞうこ', 'れいとうこ'];
+
+  public data: { name: string, space: string } = { name: '', space: '' };
+
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad AddStockPage');
   }
+
+  registStock() {
+    console.log('registStock');
+    console.log(this.data);
+
+    this.navCtrl.pop();
+  }
+
 
 }
