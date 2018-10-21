@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import * as firebase from 'firebase';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 /**
  * Generated class for the AddStockPage page.
@@ -14,13 +15,27 @@ import * as firebase from 'firebase';
   selector: 'page-add-stock',
   templateUrl: 'add-stock.html',
 })
-export class AddStockPage {
+export class AddStockPage implements OnInit {
+
+  addform: FormGroup;
 
   public spaces: string[] = ['れいぞうこ', 'ちょぞうこ', 'れいとうこ'];
 
   public data: { name: string, space: string } = { name: '', space: '' };
+  public name: string = '';
+  public space: string = '';
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
+  }
+
+  ngOnInit() {
+    this.addform = new FormGroup({
+      // name: new FormControl('', [Validators.required,
+      //   Validators.pattern('[a-zA-Z ]*'), Validators.minLength(0), Validators.maxLength(50)]),
+      name: new FormControl('', [Validators.required]),
+      space: new FormControl('', []),
+      // usage: new FormControl('', []),
+    });
   }
 
   ionViewDidLoad() {
@@ -29,11 +44,11 @@ export class AddStockPage {
 
   registStock() {
     console.log('registStock');
-    console.log(this.data);
+    console.log(this.addform.value);
 
     firebase.database().ref('stocks/').push({
-        name: this.data.name,
-        space: this.data.space,
+        name: this.addform.value.name,
+        space: this.addform.value.space,
         usage: 0
     });
 

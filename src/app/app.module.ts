@@ -5,6 +5,10 @@ import { MyApp } from './app.component';
 
 import { AboutPage } from '../pages/about/about';
 import { ContactPage } from '../pages/contact/contact';
+import { StocksPage } from '../pages/stocks/stocks';
+// import { AddStockPage } from '../pages/add-stock/add-stock';
+import { ShoppingListPage } from '../pages/shopping-list/shopping-list';
+import { SettingPage } from '../pages/setting/setting';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
 
@@ -16,6 +20,10 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     MyApp,
     AboutPage,
     ContactPage,
+    StocksPage,
+    // AddStockPage,
+    ShoppingListPage,
+    SettingPage,
     HomePage,
     TabsPage
   ],
@@ -28,6 +36,10 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     MyApp,
     AboutPage,
     ContactPage,
+    StocksPage,
+    // AddStockPage,
+    ShoppingListPage,
+    SettingPage,
     HomePage,
     TabsPage
   ],
