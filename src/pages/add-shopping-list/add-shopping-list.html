@@ -1,0 +1,37 @@
+<!--
+  Generated template for the AddShoppingListPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title></ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <form novalidate (ngSubmit)="registShoppingList()" [formGroup]="addform">
+    <ion-list>
+      <ion-item>
+        <ion-label>しょうひん名</ion-label>
+        <ion-input type="text" formControlName="name" [class.error1]="!addform.controls.name.valid && addform.controls.name.dirty"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>おくところ</ion-label>
+        <ion-select formControlName="space">
+          <ion-option *ngFor="let s of spaces" [value]="s">{{ s }}</ion-option>
+        </ion-select>
+      </ion-item>
+      <ion-item no-lines *ngIf="addform.get('name').hasError('required') && addform.get('name').touched">
+        <div class="error" *ngIf="addform.get('name').hasError('required') && addform.get('name').touched">
+          しょうひん名を入力してください
+        </div>
+      </ion-item>
+    </ion-list>
+    <button ion-button full [disabled]="addform.invalid">とうろく</button>
+  </form>
+</ion-content>
