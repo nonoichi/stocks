@@ -18,12 +18,35 @@ import { AddStockPage } from '../add-stock/add-stock';
 })
 export class StocksPage {
 
+  searchQuery: string = '';
   public items: string[] = [];
+  public filteredItems: string[] = [];
 
+  space: string = "all";
+
+  public
   constructor(public navCtrl: NavController,
     public actionSheetCtrl: ActionSheetController) {
-
+    this.initializeItems();
   }
+
+  initializeItems() {
+    var ref = firebase.database().ref("stocks/");
+    ref.orderByChild("usage").equalTo(0).on('value', resp => {
+      this.items = [];
+      resp.forEach(childSnapshot => {
+        const item = childSnapshot.val();
+        item.key = childSnapshot.key;
+        this.items.push(item);
+      });
+      this.filteredItems = this.items;
+    });
+    console.log(this.items);
+    // this.items1 = this.items.filter((item) => {
+    //   console.log(item);
+    //   return item.space === 'れいぞうこ';
+    // });
+  };
 
   ngOnInit() {
     // let ref = firebase.database().ref("stocks");
@@ -33,15 +56,15 @@ export class StocksPage {
     //     // var name = snapshot.child("name").val(); // {first:"Ada",last:"Lovelace"}
     // });
 
-    var ref = firebase.database().ref("stocks/");
-    ref.orderByChild("usage").equalTo(0).on('value', resp => {
-      this.items = [];
-      resp.forEach(childSnapshot => {
-        const item = childSnapshot.val();
-        item.key = childSnapshot.key;
-        this.items.push(item);
-      });
-    });
+    // var ref = firebase.database().ref("stocks/");
+    // ref.orderByChild("usage").equalTo(0).on('value', resp => {
+    //   this.items = [];
+    //   resp.forEach(childSnapshot => {
+    //     const item = childSnapshot.val();
+    //     item.key = childSnapshot.key;
+    //     this.items.push(item);
+    //   });
+    // });
 
     // firebase.database().ref('stocks/').on('value', resp => {
     //   if (resp) {
@@ -100,6 +123,42 @@ export class StocksPage {
       ]
     });
     actionSheet.present();
+  }
+
+  getItems(ev: any, space: string) {
+    // Reset items back to all of the items
+    this.initializeItems();
+
+    // set val to the value of the searchbar
+    const val = ev.target.value;
+
+    // if the value is an empty string don't filter the items
+    if (val && val.trim() != '') {
+      this.filteredItems = this.filteredItems.filter((item) => {
+        // console.log(item.name.indexOf(val));
+        // console.log(val);
+        // return true;
+        if (!space) {
+          return item['name'].indexOf(val) > -1;
+        } else {
+          return item['space'] === space && item['name'].indexOf(val) > -1;
+        }
+      });
+    }
+  }
+
+  onSelectChange (space: string) {
+    console.log(space);
+    if (!space) {
+      this.filteredItems = this.items;
+    } else {
+      this.filteredItems = this.items.filter((item) => {
+        // console.log(item.name.indexOf(val));
+        console.log(item);
+        // return true;
+        return item.space === space;
+      });
+    }
   }
 
   ionViewDidLoad() {

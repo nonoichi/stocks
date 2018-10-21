@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { ActionSheetController } from 'ionic-angular';
 import * as firebase from 'firebase';
-// import { AddShoppingListPage } from '../add-shopping-list/add-shopping-list';
+import { AddShoppingListPage } from '../add-shopping-list/add-shopping-list';
 
 /**
  * Generated class for the ShoppingListPage page.
@@ -22,10 +22,10 @@ export class ShoppingListPage {
 
   constructor(public navCtrl: NavController,
     public actionSheetCtrl: ActionSheetController) {
-
+    this.initializeItems();
   }
 
-  ngOnInit() {
+  initializeItems() {
     var ref = firebase.database().ref("stocks/");
     ref.orderByChild("usage").equalTo(1).on('value', resp => {
       this.items = [];
@@ -35,6 +35,19 @@ export class ShoppingListPage {
         this.items.push(item);
       });
     });
+
+  };
+
+  ngOnInit() {
+    // var ref = firebase.database().ref("stocks/");
+    // ref.orderByChild("usage").equalTo(1).on('value', resp => {
+    //   this.items = [];
+    //   resp.forEach(childSnapshot => {
+    //     const item = childSnapshot.val();
+    //     item.key = childSnapshot.key;
+    //     this.items.push(item);
+    //   });
+    // });
     // firebase.database().ref('stocks/').on('value', resp => {
     //   if (resp) {
     //     this.items = [];
@@ -49,7 +62,7 @@ export class ShoppingListPage {
   }
 
   addShoppingList() {
-    this.navCtrl.push('AddShoppingList');
+    this.navCtrl.push('AddShoppingListPage');
   }
 
   itemSelected(item) {
@@ -87,6 +100,24 @@ export class ShoppingListPage {
       ]
     });
     actionSheet.present();
+  }
+
+  getItems(ev: any) {
+    // Reset items back to all of the items
+    this.initializeItems();
+
+    // set val to the value of the searchbar
+    const val = ev.target.value;
+
+    // if the value is an empty string don't filter the items
+    if (val && val.trim() != '') {
+      this.items = this.items.filter((item) => {
+        // console.log(item.name.indexOf(val));
+        // console.log(val);
+        // return true;
+        return true; //(item.name.indexOf(val) > -1);
+      })
+    }
   }
 
   ionViewDidLoad() {

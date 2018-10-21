@@ -19,11 +19,13 @@ export class AddStockPage implements OnInit {
 
   addform: FormGroup;
 
+  public categories: string[] = ['たべもの', 'にちようひん', 'そのた'];
   public spaces: string[] = ['れいぞうこ', 'ちょぞうこ', 'れいとうこ'];
 
-  public data: { name: string, space: string } = { name: '', space: '' };
-  public name: string = '';
-  public space: string = '';
+  public data: { name: string, space: string, category: string, memo: string } = { name: '', space: '', category: '', memo: '' };
+  // public name: string = '';
+  // public space: string = '';
+  // public memo: string = '';
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
@@ -34,6 +36,8 @@ export class AddStockPage implements OnInit {
       //   Validators.pattern('[a-zA-Z ]*'), Validators.minLength(0), Validators.maxLength(50)]),
       name: new FormControl('', [Validators.required]),
       space: new FormControl('', []),
+      category: new FormControl('', []),
+      memo: new FormControl('', []),
       // usage: new FormControl('', []),
     });
   }
@@ -49,6 +53,8 @@ export class AddStockPage implements OnInit {
     firebase.database().ref('stocks/').push({
         name: this.addform.value.name,
         space: this.addform.value.space,
+        category: this.addform.value.category,
+        memo: this.addform.value.memo,
         usage: 0
     });
 
