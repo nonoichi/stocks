@@ -155,8 +155,8 @@ export class StocksPage {
       this.filteredItems = this.items.filter((item) => {
         // console.log(item.name.indexOf(val));
         console.log(item);
-        // return true;
-        return item.space === space;
+        return true;
+        // return item.space === space;
       });
     }
   }
