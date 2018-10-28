@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { ActionSheetController } from 'ionic-angular';
 import * as firebase from 'firebase';
 import { AddStockPage } from '../add-stock/add-stock';
+import { StockInfo } from './model/stock-info';
 
 /**
  * Generated class for the StocksPage page.
@@ -11,80 +12,86 @@ import { AddStockPage } from '../add-stock/add-stock';
  * Ionic pages and navigation.
  */
 
+/**
+ *
+ *
+ * @export
+ * @class StocksPage
+ */
 @IonicPage()
 @Component({
   selector: 'page-stocks',
   templateUrl: 'stocks.html',
 })
+
 export class StocksPage {
 
-  searchQuery: string = '';
-  public items: string[] = [];
-  public filteredItems: string[] = [];
+  // 全商品リスト
+  public items: StockInfo[] = [];
+  // 商品リスト
+  public filteredItems: StockInfo[];
+  // 選択中のタブ情報
+  public selectedSpace: string;
+  // 置き場マスタ
+  public spaceList: string[] = ['すべて', 'れいぞうこ', 'ちょぞうこ', 'れいとうこ', 'そのた'];
 
-  space: string = "all";
-
-  public
-  constructor(public navCtrl: NavController,
+  public constructor(public navCtrl: NavController,
     public actionSheetCtrl: ActionSheetController) {
-    this.initializeItems();
   }
 
+  /**
+   * アイテムを再セット
+   *
+   * @memberof StocksPage
+   */
   initializeItems() {
-    var ref = firebase.database().ref("stocks/");
-    ref.orderByChild("usage").equalTo(0).on('value', resp => {
+    this.filteredItems = [];
+    firebase.database().ref("stocks")
+    .orderByChild("usage").equalTo(0)
+    .on('value', resp => {
       this.items = [];
       resp.forEach(childSnapshot => {
         const item = childSnapshot.val();
         item.key = childSnapshot.key;
         this.items.push(item);
       });
-      this.filteredItems = this.items;
+      if (this.selectedSpace !== 'すべて') {
+        this.filteredItems = this.filteredItems.filter((item) => {
+          return item.space === this.selectedSpace;
+        });
+      } else {
+        this.filteredItems = this.items;
+      }
     });
-    console.log(this.items);
-    // this.items1 = this.items.filter((item) => {
-    //   console.log(item);
-    //   return item.space === 'れいぞうこ';
-    // });
-  };
-
-  ngOnInit() {
-    // let ref = firebase.database().ref("stocks");
-    // ref.once("value")
-    //     .then(function (snapshot) {
-    //     console.log(snapshot);
-    //     // var name = snapshot.child("name").val(); // {first:"Ada",last:"Lovelace"}
-    // });
-
-    // var ref = firebase.database().ref("stocks/");
-    // ref.orderByChild("usage").equalTo(0).on('value', resp => {
-    //   this.items = [];
-    //   resp.forEach(childSnapshot => {
-    //     const item = childSnapshot.val();
-    //     item.key = childSnapshot.key;
-    //     this.items.push(item);
-    //   });
-    // });
-
-    // firebase.database().ref('stocks/').on('value', resp => {
-    //   if (resp) {
-    //     this.items = [];
-    //     resp.forEach(childSnapshot => {
-    //       const item = childSnapshot.val();
-    //       item.key = childSnapshot.key;
-    //       this.items.push(item);
-          console.log(this.items);
-    //     });
-    //   }
-    // });
   }
 
+  /**
+   * 初期化処理
+   *
+   * @memberof StocksPage
+   */
+  ngOnInit() {
+    this.selectedSpace = 'すべて';
+
+    this.initializeItems();
+  }
+
+  /**
+   * アイテム追加
+   *
+   * @memberof StocksPage
+   */
   addStock() {
     this.navCtrl.push('AddStockPage');
   }
 
+  /**
+   * アイテム選択
+   *
+   * @param {*} item
+   * @memberof StocksPage
+   */
   itemSelected(item) {
-    console.log(item.key);
     const actionSheet = this.actionSheetCtrl.create({
       title: item.name + ' をどうしますか？',
       buttons: [
@@ -94,28 +101,23 @@ export class StocksPage {
             console.log('空になった');
             console.log(item);
             firebase.database().ref('stocks/' + item.key).update({
-              // name: item.name,
-              // space: item.space,
               usage: 1
             });
           }
         }, {
           text: 'もう買わない',
-          // role: 'destructive',
           handler: () => {
             console.log('もう買わない');
             firebase.database().ref('stocks/' + item.key).remove();
           }
         }, {
           text: '内容をかえたい',
-          // role: 'destructive',
           handler: () => {
             console.log('内容を変える');
-            this.navCtrl.push('AddStockPage');
+            this.navCtrl.push('EditStockPage');
           }
         }, {
           text: 'なにもしない',
-          // role: 'cancel',
           handler: () => {
             console.log('なにもしない');
           }
@@ -125,38 +127,45 @@ export class StocksPage {
     actionSheet.present();
   }
 
-  getItems(ev: any, space: string) {
-    // Reset items back to all of the items
-    this.initializeItems();
-
-    // set val to the value of the searchbar
+  /**
+   * キーワード検索
+   *
+   * @param {*} ev
+   * @memberof StocksPage
+   */
+  getItems(ev: any) {
     const val = ev.target.value;
 
-    // if the value is an empty string don't filter the items
+    console.log(val + 'で絞り込みを行います');
+
+    this.initializeItems();
+
     if (val && val.trim() != '') {
-      this.filteredItems = this.filteredItems.filter((item) => {
-        // console.log(item.name.indexOf(val));
-        // console.log(val);
-        // return true;
-        if (!space) {
-          return item['name'].indexOf(val) > -1;
+      this.filteredItems = this.items.filter((item) => {
+        if (this.selectedSpace === 'すべて'){
+          return item.name.indexOf(val) > -1;
         } else {
-          return item['space'] === space && item['name'].indexOf(val) > -1;
+          return item.space === this.selectedSpace && item.name.indexOf(val) > -1;
         }
       });
     }
   }
 
+  /**
+   * 置き場タブ選択
+   *
+   * @param {string} space
+   * @memberof StocksPage
+   */
   onSelectChange (space: string) {
-    console.log(space);
-    if (!space) {
+    console.log(space + 'のタブがクリックされました');
+    this.selectedSpace = space;
+
+    if (space === 'すべて') {
       this.filteredItems = this.items;
     } else {
       this.filteredItems = this.items.filter((item) => {
-        // console.log(item.name.indexOf(val));
-        console.log(item);
-        return true;
-        // return item.space === space;
+        return item.space === this.selectedSpace;
       });
     }
   }

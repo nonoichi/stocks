@@ -19,33 +19,44 @@ export class AddShoppingListPage {
 
   addform: FormGroup;
 
-  public spaces: string[] = ['れいぞうこ', 'ちょぞうこ', 'れいとうこ'];
+  public categories: string[] = ['たべもの', 'にちようひん', 'そのた'];
+  public spaces: string[] = ['れいぞうこ', 'ちょぞうこ', 'れいとうこ', 'そのた'];
+  public usages: number[] = [0, 1]; // 0:買ったもの、1:買うもの
 
-  public data: { name: string, space: string } = { name: '', space: '' };
-  public name: string = '';
-  public space: string = '';
+  public data: { name: string, space: string, category: string, memo: string } = { name: '', space: '', category: '', memo: '' };
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
 
+  /**
+   * 初期化処理
+   *
+   * @memberof AddStockPage
+   */
   ngOnInit() {
     this.addform = new FormGroup({
-      // name: new FormControl('', [Validators.required,
-      //   Validators.pattern('[a-zA-Z ]*'), Validators.minLength(0), Validators.maxLength(50)]),
       name: new FormControl('', [Validators.required]),
       space: new FormControl('', []),
-      // usage: new FormControl('', []),
+      category: new FormControl('', []),
+      memo: new FormControl('', []),
+      usage: new FormControl('', []),
     });
   }
 
+  /**
+   * アイテム追加
+   *
+   * @memberof AddStockPage
+   */
   registShoppingList() {
-    console.log('registShoppingList');
-    console.log(this.addform.value);
+    console.log('アイテムを追加します');
 
     firebase.database().ref('stocks/').push({
-      name: this.addform.value.name,
-      space: this.addform.value.space,
-      usage: 1
+        name: this.addform.value.name,
+        space: this.addform.value.space,
+        category: this.addform.value.category,
+        memo: this.addform.value.memo,
+        usage: this.usages[1]
     });
 
     this.navCtrl.pop();
