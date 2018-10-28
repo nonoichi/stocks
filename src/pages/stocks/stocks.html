@@ -15,109 +15,23 @@
   </ion-navbar>
   <ion-toolbar no-border-top>
     <ion-segment [(ngModel)]="space">
-      <ion-segment-button value="all" (click)="onSelectChange()">
-        すべて
-      </ion-segment-button>
-      <ion-segment-button value="space1" (click)="onSelectChange('れいぞうこ')">
-        れいぞうこ
-      </ion-segment-button>
-      <ion-segment-button value="space2" (click)="onSelectChange('ちょぞうこ')">
-        ちょぞうこ
-      </ion-segment-button>
-      <ion-segment-button value="space3" (click)="onSelectChange('れいとうこ')">
-        れいとうこ
-      </ion-segment-button>
-      <ion-segment-button value="space4" (click)="onSelectChange('そのた')">
-        そのた
+      <ion-segment-button *ngFor="let space of spaceList" (click)="onSelectChange(space)">
+        {{ space }}
       </ion-segment-button>
     </ion-segment>
   </ion-toolbar>
-
 </ion-header>
-<!--
-<ion-content padding>
-  <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>
-  <ion-list>
-    <button ion-item *ngFor="let item of filteredItems" (click)="itemSelected(item)">
-      [{{ item.space }}] {{ item.name }}
-    </button>
-  </ion-list>
-</ion-content> -->
-
-<!-- <ion-content padding>
-<div [ngSwitch]="space">
-  <ion-list *ngSwitchCase="'all'">
-    <ion-item>
-      <ion-thumbnail item-start>
-        <img src="img/thumbnail-puppy-1.jpg">
-      </ion-thumbnail>
-      <h2>Ruby</h2>
-    </ion-item>
-  </ion-list>
-
-  <ion-list *ngSwitchCase="'space1'">
-    <ion-item>
-      <ion-thumbnail item-start>
-        <img src="img/thumbnail-kitten-1.jpg">
-      </ion-thumbnail>
-      <h2>Luna</h2>
-    </ion-item>
-    ...
-  </ion-list>
-</div>
-</ion-content> -->
-
 
 <ion-content padding>
-  <div [ngSwitch]="space">
-    <ion-list *ngSwitchCase="'all'">
-      <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>
-      <button ion-item ion-item *ngFor="let item of filteredItems" (click)="itemSelected(item)">
-        <ion-thumbnail item-start>
-          <img src="assets/imgs/parts/80x80.png">
-        </ion-thumbnail>
-        <h2>[{{ item.space }}] {{ item.name }}</h2>
-      </button>
-    </ion-list>
-
-    <ion-list *ngSwitchCase="'space1'">
-      <ion-searchbar (ionInput)="getItems($event, 'れいぞうこ')"></ion-searchbar>
-      <ion-item *ngFor="let item of filteredItems" (click)="itemSelected(item)">
-        <ion-thumbnail item-start>
-          <img src="assets/imgs/parts/80x80.png">
-        </ion-thumbnail>
-        <h2>[{{ item.space }}] {{ item.name }}</h2>
-      </ion-item>
-    </ion-list>
-
-    <ion-list *ngSwitchCase="'space2'">
-      <ion-searchbar (ionInput)="getItems($event, 'ちょぞうこ')"></ion-searchbar>
-      <ion-item *ngFor="let item of filteredItems" (click)="itemSelected(item)">
-        <ion-thumbnail item-start>
-          <img src="assets/imgs/parts/80x80.png">
-        </ion-thumbnail>
-        <h2>[{{ item.space }}] {{ item.name }}</h2>
-      </ion-item>
-    </ion-list>
-
-    <ion-list *ngSwitchCase="'space3'">
-      <ion-searchbar (ionInput)="getItems($event, 'れいとうこ')"></ion-searchbar>
-      <ion-item *ngFor="let item of filteredItems" (click)="itemSelected(item)">
-        <ion-thumbnail item-start>
-          <img src="assets/imgs/parts/80x80.png">
-        </ion-thumbnail>
-        <h2>[{{ item.space }}] {{ item.name }}</h2>
-      </ion-item>
-    </ion-list>
-
-    <ion-list *ngSwitchCase="'space4'">
-      <ion-searchbar (ionInput)="getItems($event, 'そのた')"></ion-searchbar>
-      <ion-item *ngFor="let item of filteredItems" (click)="itemSelected(item)">
-        <ion-thumbnail item-start>
-          <img src="assets/imgs/parts/80x80.png">
-        </ion-thumbnail>
-        <h2>[{{ item.space }}] {{ item.name }}</h2>
-      </ion-item>
-    </ion-list>
+    <div>
+      <ion-list>
+        <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>
+        <button ion-item ion-item *ngFor="let item of filteredItems" (click)="itemSelected(item)">
+          <ion-thumbnail item-start>
+            <img src="assets/imgs/parts/80x80.png">
+          </ion-thumbnail>
+          <h2>[{{ item.space }}] {{ item.name }}</h2>
+        </button>
+      </ion-list>
   </div>
 </ion-content>

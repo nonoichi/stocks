@@ -5,11 +5,9 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-
   <ion-navbar>
-    <ion-title></ion-title>
+    <ion-title>かったものをとうろくする</ion-title>
   </ion-navbar>
-
 </ion-header>
 
 
@@ -33,8 +31,8 @@
         </ion-select>
       </ion-item>
       <ion-item>
-      <ion-label>メモ</ion-label>
-      <ion-textarea formControlName="memo"></ion-textarea>
+        <ion-label>メモ</ion-label>
+        <ion-textarea formControlName="memo"></ion-textarea>
       </ion-item>
       <ion-item no-lines *ngIf="addform.get('name').hasError('required') && addform.get('name').touched">
         <div class="error" *ngIf="addform.get('name').hasError('required') && addform.get('name').touched">
