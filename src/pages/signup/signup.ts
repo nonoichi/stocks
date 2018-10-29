@@ -3,7 +3,7 @@ import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angu
 import * as firebase from 'firebase';
 
 /**
- * Generated class for the SigninPage page.
+ * Generated class for the SignupPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
@@ -11,10 +11,10 @@ import * as firebase from 'firebase';
 
 @IonicPage()
 @Component({
-  selector: 'page-signin',
-  templateUrl: 'signin.html',
+  selector: 'page-signup',
+  templateUrl: 'signup.html',
 })
-export class SigninPage {
+export class SignupPage {
 
   data: { email: string, password: string } = { email: '', password: '' };
 
@@ -23,11 +23,11 @@ export class SigninPage {
     public alertController: AlertController) {
   }
 
-  async signIn() {
+  async signUp() {
     try {
       await firebase
         .auth()
-        .signInWithEmailAndPassword(this.data.email, this.data.password);
+        .createUserWithEmailAndPassword(this.data.email, this.data.password);
 
       this.navCtrl.setRoot('room');
 
@@ -41,12 +41,8 @@ export class SigninPage {
     }
   }
 
-  signUp() {
-    this.navCtrl.push('signup');
-  }
-
   ionViewDidLoad() {
-    console.log('ionViewDidLoad SigninPage');
+    console.log('ionViewDidLoad SignupPage');
   }
 
 }

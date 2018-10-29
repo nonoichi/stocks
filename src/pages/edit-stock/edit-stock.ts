@@ -18,6 +18,12 @@ export class EditStockPage {
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
 
+  ngOnInit() {
+    console.log(this.navParams);
+	// this.urlParamID = navParams.get('1').value;
+    // console.log(event);
+  }
+
   ionViewDidLoad() {
     console.log('ionViewDidLoad EditStockPage');
   }
