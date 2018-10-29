@@ -1,5 +1,5 @@
 <!--
-  Generated template for the SigninPage page.
+  Generated template for the SignupPage page.
 
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
@@ -7,7 +7,10 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>signin</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>signup</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -25,10 +28,7 @@
       </ion-item>
     </ion-list>
     <p>
-      <ion-button expand="block" color="primary" type="button" (click)="signIn()">Sign In</ion-button>
-    </p>
-    <p>
-      <ion-button expand="block" fill="clear" color="secondary" type="button" (click)="signUp()">Sign Up</ion-button>
+      <ion-button expand="block" color="primary" color="secondary" type="button" (click)="signUp()">Sign Up</ion-button>
     </p>
   </form>
 </ion-content>
