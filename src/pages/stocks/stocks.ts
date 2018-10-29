@@ -111,7 +111,7 @@ export class StocksPage {
           // role: 'destructive',
           handler: () => {
             console.log('内容を変える');
-            this.navCtrl.push('AddStockPage');
+            this.navCtrl.push('EditStockPage', item.key);
           }
         }, {
           text: 'なにもしない',
