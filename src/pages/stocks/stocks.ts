@@ -114,7 +114,7 @@ export class StocksPage {
           text: '内容をかえたい',
           handler: () => {
             console.log('内容を変える');
-            this.navCtrl.push('EditStockPage', 1);
+            this.navCtrl.push('EditStockPage', item.key);
           }
         }, {
           text: 'なにもしない',
