@@ -14,27 +14,28 @@
 
 
 <ion-content padding>
-  <form novalidate (ngSubmit)="registStock()" [formGroup]="editform">
+  <form novalidate (ngSubmit)="updateStock()" [formGroup]="editform">
     <ion-list>
       <ion-item>
         <ion-label>しょうひん名</ion-label>
-        <ion-input type="text" formControlName="name" [class.error1]="!editform.controls.name.valid && editform.controls.name.dirty"></ion-input>
+        <ion-input type="text"
+        formControlName="name" [(ngModel)]="form.name" [class.error1]="!editform.controls.name.valid && editform.controls.name.dirty"></ion-input>
       </ion-item>
       <ion-item>
         <ion-label>しゅるい</ion-label>
-        <ion-select formControlName="category">
+        <ion-select formControlName="category" [(ngModel)]="form.category">
           <ion-option *ngFor="let c of categories" [value]="c">{{ c }}</ion-option>
         </ion-select>
       </ion-item>
       <ion-item>
         <ion-label>おいたところ</ion-label>
-        <ion-select formControlName="space">
+        <ion-select formControlName="space" [(ngModel)]="form.space">
           <ion-option *ngFor="let s of spaces" [value]="s">{{ s }}</ion-option>
         </ion-select>
       </ion-item>
       <ion-item>
       <ion-label>メモ</ion-label>
-      <ion-textarea formControlName="memo"></ion-textarea>
+      <ion-textarea formControlName="memo" [(ngModel)]="form.memo"></ion-textarea>
       </ion-item>
       <ion-item no-lines *ngIf="editform.get('name').hasError('required') && editform.get('name').touched">
         <div class="error" *ngIf="editform.get('name').hasError('required') && editform.get('name').touched">
@@ -42,6 +43,6 @@
         </div>
       </ion-item>
     </ion-list>
-    <button ion-button full [disabled]="editform.invalid">とうろく</button>
+    <button ion-button full [disabled]="editform.invalid">へんこうする</button>
   </form>
 </ion-content>

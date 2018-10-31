@@ -21,66 +21,62 @@ export class EditStockPage implements OnInit {
   editform: FormGroup;
 
   public categories: string[] = ['たべもの', 'にちようひん', 'そのた'];
-  public spaces: string[] = ['れいぞうこ', 'ちょぞうこ', 'れいとうこ'];
+  public spaces: string[] = ['れいぞうこ', 'ちょぞうこ', 'れいとうこ', 'そのた'];
+  public usages: number[] = [0, 1]; // 0:買ったもの、1:買うもの
+
+  public form: string[] = [];
 
   public data: { name: string, space: string, category: string, memo: string } = { name: '', space: '', category: '', memo: '' };
-  // public name: string = '';
-  // public space: string = '';
-  // public memo: string = '';
-  public item: string[] = [];
+
   private item_key = "";
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
-    this.item_key = navParams.data;
-    console.log(this.item_key);
-    this.initializeItem();
+    this.initializeItem(navParams.data);
   }
 
-  initializeItem() {
-    var ref = firebase.database().ref("stocks/");
-    ref. child(this.item_key).on('value', resp => {
-      this.item = [];
-      resp.forEach(childSnapshot => {
-        const item = childSnapshot.val();
-        this.item.push(item);
-      });
-    });
-    console.log(this.item);
-  };
+  initializeItem(p) {
+    if (p.length === undefined) {
+      // かったものリストへもどる
+      // this.navCtrl.setRoot('stocks');
+    } else {
+      this.item_key = p;
+    }
 
-  ngOnInit() {
     this.editform = new FormGroup({
-      // name: new FormControl('', [Validators.required,
-      //   Validators.pattern('[a-zA-Z ]*'), Validators.minLength(0), Validators.maxLength(50)]),
       name: new FormControl('', [Validators.required]),
       space: new FormControl('', []),
       category: new FormControl('', []),
       memo: new FormControl('', []),
       // usage: new FormControl('', []),
     });
+
+    firebase.database().ref('stocks/' + this.item_key).once('value', resp => {
+      this.form['name'] = resp.val().name;
+      this.form['category'] = resp.val().category;
+      this.form['space'] = resp.val().space;
+      this.form['memo'] = resp.val().memo;
+      this.form['usage'] = resp.val().usage;
+    });
   }
 
   ngOnInit() {
-    console.log(this.navParams);
-	// this.urlParamID = navParams.get('1').value;
-    // console.log(event);
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad EditStockPage');
   }
 
-  registStock() {
-    console.log('registStock');
-    console.log(this.editform.value);
+  updateStock() {
+    console.log('update stock data.');
 
-    firebase.database().ref('stocks/').push({
-        name: this.editform.value.name,
-        space: this.editform.value.space,
-        category: this.editform.value.category,
-        memo: this.editform.value.memo,
-        usage: 0
+    firebase.database().ref('stocks/' + this.item_key).update({
+      name: this.editform.value.name,
+      space: this.editform.value.space,
+      category: this.editform.value.category,
+      memo: this.editform.value.memo
     });
+
+    this.navCtrl.pop();
   }
 
 }
