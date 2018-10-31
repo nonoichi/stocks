@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>signin</ion-title>
+    <ion-title>ログイン</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -16,19 +16,22 @@
   <form>
     <ion-list>
       <ion-item>
-        <ion-label position="floating">Enter your E-mail</ion-label>
+        <ion-label position="floating">メールアドレス</ion-label>
         <ion-input type="text" [(ngModel)]="data.email" name="email" required></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label position="floating">Password</ion-label>
+        <ion-label position="floating">パスワード</ion-label>
         <ion-input type="password" [(ngModel)]="data.password" name="password" required></ion-input>
       </ion-item>
     </ion-list>
     <p>
-      <ion-button expand="block" color="primary" type="button" (click)="signIn()">Sign In</ion-button>
+      <button ion-button expand="block" color="primary" (click)="signIn(data)">Sign In</button>
     </p>
     <p>
-      <ion-button expand="block" fill="clear" color="secondary" type="button" (click)="signUp()">Sign Up</ion-button>
+      <button ion-button expand="block" fill="clear" color="secondary" (click)="signUp()">Sign Up</button>
+    </p>
+    <p>
+      <button ion-button expand="block" fill="clear" color="secondary" (click)="guest()">ユーザ登録せずに使う</button>
     </p>
   </form>
 </ion-content>

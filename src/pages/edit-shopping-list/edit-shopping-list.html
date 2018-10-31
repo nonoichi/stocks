@@ -1,18 +1,39 @@
-<!--
-  Generated template for the EditShoppingListPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
+    <ion-navbar>
+      <ion-title>買うものを変更する</ion-title>
+    </ion-navbar>
+  </ion-header>
 
-  <ion-navbar>
-    <ion-title>edit-shopping-list</ion-title>
-  </ion-navbar>
-
-</ion-header>
-
-
-<ion-content padding>
-
-</ion-content>
+  <ion-content padding>
+    <form novalidate (ngSubmit)="updateShoppingList()" [formGroup]="editform">
+      <ion-list>
+        <ion-item>
+          <ion-label>商品名</ion-label>
+          <ion-input type="text"
+          formControlName="name" [(ngModel)]="form.name" [class.error1]="!editform.controls.name.valid && editform.controls.name.dirty"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label>種類</ion-label>
+          <ion-select formControlName="category" [(ngModel)]="form.category">
+            <ion-option *ngFor="let c of categories" [value]="c">{{ c }}</ion-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-label>置き場</ion-label>
+          <ion-select formControlName="space" [(ngModel)]="form.space">
+            <ion-option *ngFor="let s of spaces" [value]="s">{{ s }}</ion-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-label>めも</ion-label>
+          <ion-textarea formControlName="memo" [(ngModel)]="form.memo"></ion-textarea>
+        </ion-item>
+        <ion-item no-lines *ngIf="editform.get('name').hasError('required') && editform.get('name').touched">
+          <div class="error" *ngIf="editform.get('name').hasError('required') && editform.get('name').touched">
+            商品名を入力してください
+          </div>
+        </ion-item>
+      </ion-list>
+      <button ion-button full [disabled]="editform.invalid">変更する</button>
+    </form>
+  </ion-content>

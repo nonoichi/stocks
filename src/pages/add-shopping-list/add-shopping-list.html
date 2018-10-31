@@ -6,7 +6,7 @@
 -->
 <ion-header>
   <ion-navbar>
-    <ion-title>かうものをとうろくする</ion-title>
+    <ion-title>買うものを登録する</ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -14,31 +14,31 @@
   <form novalidate (ngSubmit)="registShoppingList()" [formGroup]="addform">
     <ion-list>
       <ion-item>
-        <ion-label>しょうひん名</ion-label>
+        <ion-label>商品名</ion-label>
         <ion-input type="text" formControlName="name" [class.error1]="!addform.controls.name.valid && addform.controls.name.dirty"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label>しゅるい</ion-label>
+        <ion-label>種類</ion-label>
         <ion-select formControlName="category">
           <ion-option *ngFor="let c of categories" [value]="c">{{ c }}</ion-option>
         </ion-select>
       </ion-item>
       <ion-item>
-        <ion-label>おくところ</ion-label>
+        <ion-label>置き場</ion-label>
         <ion-select formControlName="space">
           <ion-option *ngFor="let s of spaces" [value]="s">{{ s }}</ion-option>
         </ion-select>
       </ion-item>
       <ion-item>
-        <ion-label>メモ</ion-label>
+        <ion-label>めも</ion-label>
         <ion-textarea formControlName="memo"></ion-textarea>
       </ion-item>
       <ion-item no-lines *ngIf="addform.get('name').hasError('required') && addform.get('name').touched">
         <div class="error" *ngIf="addform.get('name').hasError('required') && addform.get('name').touched">
-          しょうひん名を入力してください
+          商品名を入力してください
         </div>
       </ion-item>
     </ion-list>
-    <button ion-button full [disabled]="addform.invalid">とうろく</button>
+    <button ion-button full [disabled]="addform.invalid">登録する</button>
   </form>
 </ion-content>

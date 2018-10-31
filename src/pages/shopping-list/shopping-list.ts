@@ -4,6 +4,10 @@ import { ActionSheetController } from 'ionic-angular';
 import * as firebase from 'firebase';
 import { AddShoppingListPage } from '../add-shopping-list/add-shopping-list';
 import { StockInfo } from '../stocks/model/stock-info';
+import { appConfig } from '../../config/app';
+
+import { AngularFireDatabase } from 'angularfire2/database';
+import { Observable } from 'rxjs/Observable';
 
 /**
  * Generated class for the ShoppingListPage page.
@@ -33,7 +37,9 @@ export class ShoppingListPage {
   // 選択中のタブ情報
   public selectedSpace: string;
   // 置き場マスタ
-  public spaceList: string[] = ['すべて', 'れいぞうこ', 'ちょぞうこ', 'れいとうこ', 'そのた'];
+  public spaces: string[] = appConfig.spaces;
+  // 置き場アイコンマスタ
+  public spaceIcons = appConfig.spaceIcons;
 
   constructor(public navCtrl: NavController,
     public actionSheetCtrl: ActionSheetController) {
@@ -56,7 +62,7 @@ export class ShoppingListPage {
         item.key = childSnapshot.key;
         this.items.push(item);
       });
-      if (this.selectedSpace !== 'すべて') {
+      if (this.selectedSpace !== this.spaces[0]) {
         this.filteredItems = this.filteredItems.filter((item) => {
           return item.space === this.selectedSpace;
         });
@@ -72,7 +78,7 @@ export class ShoppingListPage {
    * @memberof StocksPage
    */
   ngOnInit() {
-    this.selectedSpace = 'すべて';
+    this.selectedSpace = this.spaces[0];
 
     this.initializeItems();
   }
@@ -94,7 +100,8 @@ export class ShoppingListPage {
    */
   itemSelected(item) {
     const actionSheet = this.actionSheetCtrl.create({
-      title: item.name + ' をどうしますか？',
+      title: item.name + ' をどうしますか？ ',
+      subTitle: '( ' + item.memo + ' )',
       buttons: [
         {
           text: '買った',
@@ -117,10 +124,16 @@ export class ShoppingListPage {
             firebase.database().ref('stocks/' + item.key).remove();
           }
         }, {
-          text: 'なにもしない',
+          text: '内容をかえたい',
           handler: () => {
-            console.log('なにもしない');
+            console.log('内容を変える');
+            this.navCtrl.push('EditShoppingListPage', item.key);
           }
+        // }, {
+        //   text: 'なにもしない',
+        //   handler: () => {
+        //     console.log('なにもしない');
+        //   }
         }
       ]
     });
@@ -143,10 +156,10 @@ export class ShoppingListPage {
 
     if (val && val.trim() != '') {
       this.filteredItems = this.items.filter((item) => {
-        if (this.selectedSpace === 'すべて'){
-          return item.name.indexOf(val) > -1;
+        if (this.selectedSpace === this.spaces[0]){
+          return item.name.indexOf(val) > -1 || item.memo.indexOf(val) > -1;
         } else {
-          return item.space === this.selectedSpace && item.name.indexOf(val) > -1;
+          return item.space === this.selectedSpace && (item.name.indexOf(val) > -1 || item.memo.indexOf(val) > -1);
         }
       });
     }
@@ -162,7 +175,7 @@ export class ShoppingListPage {
     console.log(space + 'のタブがクリックされました');
     this.selectedSpace = space;
 
-    if (space === 'すべて') {
+    if (space === this.spaces[0]) {
       this.filteredItems = this.items;
     } else {
       this.filteredItems = this.items.filter((item) => {

@@ -15,7 +15,7 @@
   </ion-navbar>
   <ion-toolbar no-border-top>
     <ion-segment [(ngModel)]="space">
-      <ion-segment-button *ngFor="let space of spaceList" (click)="onSelectChange(space)">
+      <ion-segment-button *ngFor="let space of spaces" (click)="onSelectChange(space)">
         {{ space }}
       </ion-segment-button>
     </ion-segment>
@@ -23,15 +23,38 @@
 </ion-header>
 
 <ion-content padding>
+    <!-- <ion-fab bottom right>
+      <button ion-fab mini (click)="addStock()"><ion-icon name="add"></ion-icon></button>
+      <ion-fab-list>
+        <button ion-fab><ion-icon name="logo-facebook"></ion-icon></button>
+        <button ion-fab><ion-icon name="logo-twitter"></ion-icon></button>
+        <button ion-fab><ion-icon name="logo-vimeo"></ion-icon></button>
+        <button ion-fab><ion-icon name="logo-googleplus"></ion-icon></button>
+      </ion-fab-list>
+    </ion-fab> -->
     <div>
       <ion-list>
-        <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>
+        <ion-searchbar (ionInput)="getItems($event)" placeholder="商品名、メモ"></ion-searchbar>
         <button ion-item ion-item *ngFor="let item of filteredItems" (click)="itemSelected(item)">
           <ion-thumbnail item-start>
             <img src="assets/imgs/parts/80x80.png">
           </ion-thumbnail>
-          <h2>[{{ item.space }}] {{ item.name }}</h2>
+          <h2>
+            {{ item.name }}<!-- <ion-icon name="custom-refrigerator"></ion-icon> -->
+          </h2>
         </button>
       </ion-list>
+
+      <!-- <ion-list>
+        <ion-searchbar (ionInput)="getItems($event)" placeholder="商品名、メモ"></ion-searchbar>
+        <ion-item *ngFor="let item of filteredItems" (click)="itemSelected(item)">
+          <ion-thumbnail item-start small>
+            <img src="assets/imgs/parts/80x80.png">
+             <ion-icon name="custom-refrigerator" item-end></ion-icon>
+          </ion-thumbnail>
+          <h2>{{ item.name }}</h2>
+          <p>{{ item.memo }}</p>
+        </ion-item>
+      </ion-list> -->
   </div>
 </ion-content>

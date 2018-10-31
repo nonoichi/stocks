@@ -4,11 +4,16 @@ import { ActionSheetController } from 'ionic-angular';
 import * as firebase from 'firebase';
 import { AddStockPage } from '../add-stock/add-stock';
 
+import { AngularFireDatabase } from 'angularfire2/database';
+import { Observable } from 'rxjs/Observable';
+
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
 })
+// export class HomePage {
 export class HomePage {
+  talks: Observable<any[]>;
 
   // public items: string[] = ['キャベツ', 'りんご', 'みかん', 'ピーマン'];
   public items: string[] = [];
@@ -16,8 +21,31 @@ export class HomePage {
   // constructor(public navCtrl: NavController, public actionSheetCtrl: ActionSheetController) {
   constructor(public navCtrl: NavController,
      public navParams: NavParams,
-     public actionSheetCtrl: ActionSheetController
+     public actionSheetCtrl: ActionSheetController,
+     public afDB: AngularFireDatabase
      ) {
+      this.items = [];
+      firebase.database().ref("stocks")
+      .orderByChild("usage").equalTo(0)
+      .on('value', resp => {
+        this.items = [];
+        resp.forEach(childSnapshot => {
+          const item = childSnapshot.val();
+          item.key = childSnapshot.key;
+          console.log(item);
+          // this.items.push(item);
+        });
+        // if (this.selectedSpace !== 'すべて') {
+        //   this.filteredItems = this.filteredItems.filter((item) => {
+        //     return item.space === this.selectedSpace;
+        //   });
+        // } else {
+        //   this.filteredItems = this.items;
+        // }
+      });
+
+      // this.talks = afDB.list('/stocks').valueChanges();
+      // console.log(this.talks);
   }
 
   // ngOnInit() {

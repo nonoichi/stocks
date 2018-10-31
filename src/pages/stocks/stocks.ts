@@ -1,9 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { ActionSheetController } from 'ionic-angular';
 import * as firebase from 'firebase';
-import { AddStockPage } from '../add-stock/add-stock';
 import { StockInfo } from './model/stock-info';
+import { appConfig } from '../../config/app';
+
+import { AngularFireDatabase } from 'angularfire2/database';
+import { Observable } from 'rxjs/Observable';
 
 /**
  * Generated class for the StocksPage page.
@@ -33,10 +36,12 @@ export class StocksPage {
   // 選択中のタブ情報
   public selectedSpace: string;
   // 置き場マスタ
-  public spaceList: string[] = ['すべて', 'れいぞうこ', 'ちょぞうこ', 'れいとうこ', 'そのた'];
+  public spaces: string[] = appConfig.spaces;
 
   public constructor(public navCtrl: NavController,
-    public actionSheetCtrl: ActionSheetController) {
+    public navParams: NavParams,
+    public actionSheetCtrl: ActionSheetController,
+    public afDB: AngularFireDatabase) {
   }
 
   /**
@@ -55,7 +60,7 @@ export class StocksPage {
         item.key = childSnapshot.key;
         this.items.push(item);
       });
-      if (this.selectedSpace !== 'すべて') {
+      if (this.selectedSpace !== this.spaces[0]) {
         this.filteredItems = this.filteredItems.filter((item) => {
           return item.space === this.selectedSpace;
         });
@@ -71,7 +76,7 @@ export class StocksPage {
    * @memberof StocksPage
    */
   ngOnInit() {
-    this.selectedSpace = 'すべて';
+    this.selectedSpace = this.spaces[0];
 
     this.initializeItems();
   }
@@ -99,7 +104,6 @@ export class StocksPage {
           text: '空になった',
           handler: () => {
             console.log('空になった');
-            console.log(item);
             firebase.database().ref('stocks/' + item.key).update({
               usage: 1
             });
@@ -116,11 +120,11 @@ export class StocksPage {
             console.log('内容を変える');
             this.navCtrl.push('EditStockPage', item.key);
           }
-        }, {
-          text: 'なにもしない',
-          handler: () => {
-            console.log('なにもしない');
-          }
+        // }, {
+        //   text: 'なにもしない',
+        //   handler: () => {
+        //     console.log('なにもしない');
+        //   }
         }
       ]
     });
@@ -142,10 +146,10 @@ export class StocksPage {
 
     if (val && val.trim() != '') {
       this.filteredItems = this.items.filter((item) => {
-        if (this.selectedSpace === 'すべて'){
-          return item.name.indexOf(val) > -1;
+        if (this.selectedSpace === this.spaces[0]){
+          return item.name.indexOf(val) > -1 || item.memo.indexOf(val) > -1;
         } else {
-          return item.space === this.selectedSpace && item.name.indexOf(val) > -1;
+          return item.space === this.selectedSpace && (item.name.indexOf(val) > -1 || item.memo.indexOf(val) > -1);
         }
       });
     }
@@ -161,7 +165,7 @@ export class StocksPage {
     console.log(space + 'のタブがクリックされました');
     this.selectedSpace = space;
 
-    if (space === 'すべて') {
+    if (space === this.spaces[0]) {
       this.filteredItems = this.items;
     } else {
       this.filteredItems = this.items.filter((item) => {

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import * as firebase from 'firebase';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { appConfig } from '../../config/app';
 
 /**
  * Generated class for the AddShoppingListPage page.
@@ -19,9 +20,9 @@ export class AddShoppingListPage {
 
   addform: FormGroup;
 
-  public categories: string[] = ['たべもの', 'にちようひん', 'そのた'];
-  public spaces: string[] = ['れいぞうこ', 'ちょぞうこ', 'れいとうこ', 'そのた'];
-  public usages: number[] = [0, 1]; // 0:買ったもの、1:買うもの
+  public categories: string[] = appConfig.categories;
+  public spaces: string[] = appConfig.spaces;
+  public usages: number[] = appConfig.usages;
 
   public data: { name: string, space: string, category: string, memo: string } = { name: '', space: '', category: '', memo: '' };
 

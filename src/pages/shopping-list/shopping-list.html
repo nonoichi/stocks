@@ -15,7 +15,7 @@
   </ion-navbar>
   <ion-toolbar no-border-top>
     <ion-segment [(ngModel)]="space">
-      <ion-segment-button *ngFor="let space of spaceList" (click)="onSelectChange(space)">
+      <ion-segment-button *ngFor="let space of spaces" (click)="onSelectChange(space)">
         {{ space }}
       </ion-segment-button>
     </ion-segment>
@@ -25,12 +25,14 @@
 <ion-content padding>
     <div>
       <ion-list>
-        <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>
+        <ion-searchbar (ionInput)="getItems($event)" placeholder="商品名、メモ"></ion-searchbar>
         <button ion-item ion-item *ngFor="let item of filteredItems" (click)="itemSelected(item)">
           <ion-thumbnail item-start>
             <img src="assets/imgs/parts/80x80.png">
           </ion-thumbnail>
-          <h2>[{{ item.space }}] {{ item.name }}</h2>
+          <h2>
+              {{ item.name }}<!-- <ion-icon name="custom-refrigerator"></ion-icon> -->
+          </h2>
         </button>
       </ion-list>
   </div>
