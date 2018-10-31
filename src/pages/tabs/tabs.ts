@@ -6,6 +6,7 @@ import { StocksPage } from '../stocks/stocks';
 import { ShoppingListPage } from '../shopping-list/shopping-list';
 import { SettingPage } from '../setting/setting';
 import { HomePage } from '../home/home';
+import { RoomPage } from '../room/room';
 
 @Component({
   templateUrl: 'tabs.html'
@@ -13,6 +14,7 @@ import { HomePage } from '../home/home';
 export class TabsPage {
 
   tab1Root = HomePage;
+  // tab1Root = RoomPage;
   tab2Root = StocksPage;
   tab3Root = ShoppingListPage;
   tab4Root = SettingPage;

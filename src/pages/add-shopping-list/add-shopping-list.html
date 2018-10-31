@@ -5,13 +5,10 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-
   <ion-navbar>
-    <ion-title></ion-title>
+    <ion-title>かうものをとうろくする</ion-title>
   </ion-navbar>
-
 </ion-header>
-
 
 <ion-content padding>
   <form novalidate (ngSubmit)="registShoppingList()" [formGroup]="addform">
@@ -21,10 +18,20 @@
         <ion-input type="text" formControlName="name" [class.error1]="!addform.controls.name.valid && addform.controls.name.dirty"></ion-input>
       </ion-item>
       <ion-item>
+        <ion-label>しゅるい</ion-label>
+        <ion-select formControlName="category">
+          <ion-option *ngFor="let c of categories" [value]="c">{{ c }}</ion-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
         <ion-label>おくところ</ion-label>
         <ion-select formControlName="space">
           <ion-option *ngFor="let s of spaces" [value]="s">{{ s }}</ion-option>
         </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label>メモ</ion-label>
+        <ion-textarea formControlName="memo"></ion-textarea>
       </ion-item>
       <ion-item no-lines *ngIf="addform.get('name').hasError('required') && addform.get('name').touched">
         <div class="error" *ngIf="addform.get('name').hasError('required') && addform.get('name').touched">

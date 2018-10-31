@@ -60,6 +60,12 @@ export class EditStockPage implements OnInit {
     });
   }
 
+  ngOnInit() {
+    console.log(this.navParams);
+	// this.urlParamID = navParams.get('1').value;
+    // console.log(event);
+  }
+
   ionViewDidLoad() {
     console.log('ionViewDidLoad EditStockPage');
   }

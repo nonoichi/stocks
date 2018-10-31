@@ -9,11 +9,13 @@ import { StocksPage } from '../pages/stocks/stocks';
 // import { AddStockPage } from '../pages/add-stock/add-stock';
 import { ShoppingListPage } from '../pages/shopping-list/shopping-list';
 import { SettingPage } from '../pages/setting/setting';
+import { RoomPage } from '../pages/room/room';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+
 
 @NgModule({
   declarations: [
@@ -24,6 +26,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     // AddStockPage,
     ShoppingListPage,
     SettingPage,
+    RoomPage,
     HomePage,
     TabsPage
   ],
@@ -40,6 +43,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     // AddStockPage,
     ShoppingListPage,
     SettingPage,
+    RoomPage,
     HomePage,
     TabsPage
   ],
