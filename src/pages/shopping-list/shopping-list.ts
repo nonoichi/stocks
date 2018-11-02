@@ -8,6 +8,7 @@ import { appConfig } from '../../config/app';
 
 import { AngularFireDatabase } from 'angularfire2/database';
 import { Observable } from 'rxjs/Observable';
+import { SigninPage } from '../signin/signin';
 
 /**
  * Generated class for the ShoppingListPage page.
@@ -41,9 +42,12 @@ export class ShoppingListPage {
   // 置き場アイコンマスタ
   public spaceIcons = appConfig.spaceIcons;
 
+  public user: firebase.User;
+
   constructor(public navCtrl: NavController,
     public actionSheetCtrl: ActionSheetController) {
-    this.initializeItems();
+    this.user = firebase.auth().currentUser;
+    if (!this.user) this.navCtrl.setRoot(SigninPage);
   }
 
   /**
@@ -53,7 +57,7 @@ export class ShoppingListPage {
    */
   initializeItems() {
     this.filteredItems = [];
-    firebase.database().ref("stocks")
+    firebase.database().ref("stocks/" + this.user.uid)
     .orderByChild("usage").equalTo(1)
     .on('value', resp => {
       this.items = [];
@@ -107,7 +111,7 @@ export class ShoppingListPage {
           text: '買った',
           handler: () => {
             console.log('買った');
-            firebase.database().ref('stocks/' + item.key).update({
+            firebase.database().ref('stocks/' + this.user.uid + '/' + item.key).update({
               usage: 0
             });
           }
@@ -121,7 +125,7 @@ export class ShoppingListPage {
           text: 'もう買わない',
           handler: () => {
             console.log('もう買わない');
-            firebase.database().ref('stocks/' + item.key).remove();
+            firebase.database().ref('stocks/' + this.user.uid + '/' + item.key).remove();
           }
         }, {
           text: '内容をかえたい',
@@ -152,7 +156,7 @@ export class ShoppingListPage {
 
     console.log(val + 'で絞り込みを行います');
 
-    this.initializeItems();
+    // this.initializeItems();
 
     if (val && val.trim() != '') {
       this.filteredItems = this.items.filter((item) => {

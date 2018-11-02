@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title></ion-title>
+    <ion-title>せってい</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -15,10 +15,30 @@
 
 <ion-content padding>
 
-メッセージボード
+<ion-item>
+  ログイン
+</ion-item>
+<div *ngIf="isLoggedIn(); then thenBlock; else elseBlock"></div>
+<ng-template #thenBlock><p><button ion-button full (click)="logout()">ログアウト</button></p></ng-template>
+<ng-template #elseBlock><p><button ion-button full (click)="doGoogleLogin()">Google ログイン</button></p></ng-template>
 
+<br>
+<br>
 
+<ng-container>
+  <ion-item>
+    確認コードを発行する方はこちら
+  </ion-item>
+  <p><button ion-button full [disabled]="!isLoggedIn()" (click)="createPinCode()">発行する</button></p>
+  <p *ngIf="!isLoggedIn()">ログインすると、確認コードが発行できます。</p>
+  <p>確認コードを発行すると、<br>みんなでリストの管理ができるようになります。</p>
+</ng-container>
 
-家族と共有する
+<br><br>
+
+<ion-item>
+  確認コードを教えてもらった方はこちら
+</ion-item>
+<p><button ion-button full (click)="setPinCode()">確認コードを入力する</button></p>
 
 </ion-content>

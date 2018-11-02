@@ -36,12 +36,18 @@
       <ion-list>
         <ion-searchbar (ionInput)="getItems($event)" placeholder="商品名、メモ"></ion-searchbar>
         <button ion-item ion-item *ngFor="let item of filteredItems" (click)="itemSelected(item)">
-          <ion-thumbnail item-start>
+          <!-- <ion-thumbnail item-start>
             <img src="assets/imgs/parts/80x80.png">
-          </ion-thumbnail>
+          </ion-thumbnail> -->
           <h2>
             {{ item.name }}<!-- <ion-icon name="custom-refrigerator"></ion-icon> -->
           </h2>
+          <button ion-button outline item-end icon-start color="dark">
+            {{ item.category }}
+          </button>
+          <button ion-button outline item-end icon-start>
+            {{ item.space }}
+          </button>
         </button>
       </ion-list>
 

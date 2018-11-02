@@ -18,8 +18,8 @@ import { timestamp } from 'rxjs/operators';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  // rootPage:any = TabsPage;
-  rootPage:any = SigninPage;
+  rootPage:any = TabsPage;
+  // rootPage:any = SigninPage;
 
   pages: Array<{title: string, component: any}>;
 

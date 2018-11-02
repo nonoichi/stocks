@@ -3,6 +3,8 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import * as firebase from 'firebase';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { appConfig } from '../../config/app';
+import { SigninPage } from '../signin/signin';
+import { TabsPage } from '../tabs/tabs';
 
 /**
  * Generated class for the EditStockPage page.
@@ -30,15 +32,19 @@ export class EditStockPage implements OnInit {
   public data: { name: string, space: string, category: string, memo: string } = { name: '', space: '', category: '', memo: '' };
 
   private item_key = "";
+  public user: firebase.User;
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
+    console.log(navParams);
+    this.user = firebase.auth().currentUser;
+    if (!this.user) this.navCtrl.setRoot(SigninPage);
+
     this.initializeItem(navParams.data);
   }
 
   initializeItem(p) {
     if (p.length === undefined) {
-      // かったものリストへもどる
-      // this.navCtrl.setRoot('stocks');
+      this.navCtrl.setRoot(TabsPage);
     } else {
       this.item_key = p;
     }
@@ -48,10 +54,10 @@ export class EditStockPage implements OnInit {
       space: new FormControl('', []),
       category: new FormControl('', []),
       memo: new FormControl('', []),
-      // usage: new FormControl('', []),
+      usage: new FormControl('', []),
     });
 
-    firebase.database().ref('stocks/' + this.item_key).once('value', resp => {
+    firebase.database().ref('stocks/' +  this.user.uid + '/' + this.item_key).once('value', resp => {
       this.form['name'] = resp.val().name;
       this.form['category'] = resp.val().category;
       this.form['space'] = resp.val().space;
@@ -70,7 +76,7 @@ export class EditStockPage implements OnInit {
   updateStock() {
     console.log('update stock data.');
 
-    firebase.database().ref('stocks/' + this.item_key).update({
+    firebase.database().ref('stocks/' + this.user.uid + '/' + this.item_key).update({
       name: this.editform.value.name,
       space: this.editform.value.space,
       category: this.editform.value.category,

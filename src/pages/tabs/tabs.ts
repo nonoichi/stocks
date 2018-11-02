@@ -13,14 +13,14 @@ import { RoomPage } from '../room/room';
 })
 export class TabsPage {
 
-  // tab1Root = HomePage;
-  tab1Root = StocksPage;
-  tab2Root = ShoppingListPage;
+  tab1Root = HomePage;
+  // tab1Root = StocksPage;
+  // tab2Root = ShoppingListPage;
   // tab1Root = HomePage;
   // tab1Root = RoomPage;
-  // tab2Root = StocksPage;
-  // tab3Root = ShoppingListPage;
-  // tab3Root = SettingPage;
+  tab2Root = StocksPage;
+  tab3Root = ShoppingListPage;
+  tab4Root = SettingPage;
 
   constructor() {
 

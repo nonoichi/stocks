@@ -7,6 +7,7 @@ import { appConfig } from '../../config/app';
 
 import { AngularFireDatabase } from 'angularfire2/database';
 import { Observable } from 'rxjs/Observable';
+import { SigninPage } from '../signin/signin';
 
 /**
  * Generated class for the StocksPage page.
@@ -38,10 +39,14 @@ export class StocksPage {
   // 置き場マスタ
   public spaces: string[] = appConfig.spaces;
 
+  public user: firebase.User;
+
   public constructor(public navCtrl: NavController,
     public navParams: NavParams,
     public actionSheetCtrl: ActionSheetController,
     public afDB: AngularFireDatabase) {
+      this.user = firebase.auth().currentUser;
+      if (!this.user) this.navCtrl.setRoot(SigninPage);
   }
 
   /**
@@ -51,7 +56,7 @@ export class StocksPage {
    */
   initializeItems() {
     this.filteredItems = [];
-    firebase.database().ref("stocks")
+    firebase.database().ref("stocks/" + this.user.uid)
     .orderByChild("usage").equalTo(0)
     .on('value', resp => {
       this.items = [];
@@ -60,6 +65,7 @@ export class StocksPage {
         item.key = childSnapshot.key;
         this.items.push(item);
       });
+
       if (this.selectedSpace !== this.spaces[0]) {
         this.filteredItems = this.filteredItems.filter((item) => {
           return item.space === this.selectedSpace;
@@ -104,7 +110,7 @@ export class StocksPage {
           text: '空になった',
           handler: () => {
             console.log('空になった');
-            firebase.database().ref('stocks/' + item.key).update({
+            firebase.database().ref('stocks/' + this.user.uid + '/' + item.key).update({
               usage: 1
             });
           }
@@ -112,7 +118,7 @@ export class StocksPage {
           text: 'もう買わない',
           handler: () => {
             console.log('もう買わない');
-            firebase.database().ref('stocks/' + item.key).remove();
+            firebase.database().ref('stocks/' + this.user.uid + '/' + item.key).remove();
           }
         }, {
           text: '内容をかえたい',
@@ -142,7 +148,7 @@ export class StocksPage {
 
     console.log(val + 'で絞り込みを行います');
 
-    this.initializeItems();
+    // this.initializeItems();
 
     if (val && val.trim() != '') {
       this.filteredItems = this.items.filter((item) => {
@@ -172,6 +178,7 @@ export class StocksPage {
         return item.space === this.selectedSpace;
       });
     }
+
   }
 
   ionViewDidLoad() {

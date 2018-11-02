@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import * as firebase from 'firebase';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { appConfig } from '../../config/app';
+import { SigninPage } from '../signin/signin';
 
 /**
  * Generated class for the AddStockPage page.
@@ -54,7 +55,10 @@ export class AddStockPage implements OnInit {
   registStock() {
     console.log('アイテムを追加します');
 
-    firebase.database().ref('stocks/').push({
+    var user = firebase.auth().currentUser;
+    if (!user) this.navCtrl.setRoot(SigninPage);
+
+    firebase.database().ref('stocks/' + user.uid).push({
         name: this.addform.value.name,
         space: this.addform.value.space,
         category: this.addform.value.category,
