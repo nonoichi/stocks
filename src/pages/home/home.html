@@ -1,11 +1,11 @@
 <ion-header>
   <ion-navbar>
     <ion-title>ホーム</ion-title>
-    <ion-buttons start>
+    <!-- <ion-buttons start>
       <button ion-button icon-only (click)="addStock()">
         <ion-icon name="add"></ion-icon>
       </button>
-    </ion-buttons>
+    </ion-buttons> -->
   </ion-navbar>
 </ion-header>
 
@@ -36,6 +36,13 @@
   <ion-nav id="nav" #content [root]="rootPage"></ion-nav>
 
 <ion-content padding>
-  TopPage
+  <ion-item>
+    ようこそ。<br>
+    今日はこれたべよう！
+  </ion-item>
 
+  <p>
+    <button ion-button round (click)="addStock()">かったものに追加する</button>
+    <button ion-button round (click)="addShoppingList()">かうものに追加する</button>
+  </p>
 </ion-content>

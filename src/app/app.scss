@@ -15,32 +15,147 @@
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
 
-.item-md ion-thumbnail {
-  min-width: 20px;
-  min-height: 20px;
+
+$black : #383838;
+$purple : #665990;
+$skyblue: #aaa5d1;
+$pink: #f8acac;
+$narrow-pink: #f7c9ce;
+
+.header {
+  // ヘッダ
+  ion-navbar div {
+    background-color: #665990;
+    color: #fff;
+  }
+
+  // フッタアイコン
+  ion-icon {
+    color: #fff;
+
+    &[class*="custom-"] {
+      mask-size: contain;
+      mask-position: 50% 50%;
+      mask-repeat: no-repeat;
+      background: currentColor;
+      width: 1em;
+      height: 1em;
+      bottom: 0;
+    }
+
+    &[class*="custom-cabinet"] {
+      mask-image: url(../assets/icon/cabinet.svg);
+    }
+    &[class*="custom-freezer"] {
+      mask-image: url(../assets/icon/freezer.svg);
+    }
+    &[class*="custom-refrigerator"] {
+      mask-image: url(../assets/icon/refrigerator.svg);
+    }
+    &[class*="custom-storage"] {
+      mask-image: url(../assets/icon/storage.svg);
+    }
+  }
+
+  // グローバルメニュー
+  .toolbar {
+    .toolbar-content {
+      background-color: #383838;
+      .segment {
+        .segment-button {
+          border-bottom: none;
+          color: #fff;
+          font-size: medium;
+        }
+      }
+    }
+  }
 }
 
-ion-icon {
-  &[class*="custom-"] {
-    mask-size: contain;
-    mask-position: 50% 50%;
-    mask-repeat: no-repeat;
-    background: currentColor;
-    width: 1em;
-    height: 1em;
-    bottom: 0;
+.toolbar-background-md {
+  background-color: #383838;
+}
+
+// コンテンツエリア
+.content {
+  background-color: #f7c9ce;
+
+  .item-md {
+    background-color: transparent;
+    color: #665990;
+
+    .item-inner {
+      border-bottom: none;
+    }
+
+    .scroll-content {
+      color: #665990;
+    }
+  }
+  .description {
+    color: #665990;
+    font-size: 80%;
+    margin-left: 10px;
+  }
+  .item-md ion-thumbnail {
+    min-width: 20px;
+    min-height: 20px;
   }
 
-  &[class*="custom-cabinet"] {
-    mask-image: url(../assets/icon/cabinet.svg);
+  .fab {
+    background-color: #383838;
   }
-  &[class*="custom-freezer"] {
-    mask-image: url(../assets/icon/freezer.svg);
+}
+
+// フッタアイコン
+.tabs-md {
+  .tabbar {
+    background-color: #665990;
+
+    .tab-button {
+      color: #fff;
+    }
+    .tab-button-icon {
+      color: #fff;
+    }
+    .tab-button[aria-selected=true] {
+      background-color: #383838;
+      .tab-button-icon {
+        color: #fff;
+      }
+    }
   }
-  &[class*="custom-refrigerator"] {
-    mask-image: url(../assets/icon/refrigerator.svg);
+}
+
+// ボタン
+.button {
+  background-color: #665990;
+  .button-full {
+    background-color: #665990;
   }
-  &[class*="custom-storage"] {
-    mask-image: url(../assets/icon/storage.svg);
+
+  .icon-start {
+    background-color: #fff;
   }
+}
+
+.item-md .item-button {
+  background-color: #aaa5d1;
+  border-color: #aaa5d1;
+  color: #fff;
+}
+
+.item-input .label-md, .item-select .label-md, .item-datetime .label-md {
+  color: #665990;
+}
+
+.list-md .item-input
+.list-md .item-select {
+  border-bottom: 1px solid #dedede;
+}
+
+.list-md .item-input.ng-valid.item-input-has-value:not(.input-has-focus):not(.item-input-has-focus):last-child, .list-md .item-input.ng-valid.input-has-value:not(.input-has-focus):not(.item-input-has-focus):last-child{
+  border-bottom-color: #f8acac;
+  -webkit-box-shadow: inset 0 -1px 0 0 #f8acac;
+  box-shadow: inset 0 -1px 0 0 #f8acac;
 }

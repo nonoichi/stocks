@@ -23,6 +23,5 @@ export class TabsPage {
   tab4Root = SettingPage;
 
   constructor() {
-
   }
 }

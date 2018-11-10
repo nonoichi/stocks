@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>せってい</ion-title>
+    <ion-title>設定</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -15,30 +15,39 @@
 
 <ion-content padding>
 
-<ion-item>
-  ログイン
-</ion-item>
-<div *ngIf="isLoggedIn(); then thenBlock; else elseBlock"></div>
-<ng-template #thenBlock><p><button ion-button full (click)="logout()">ログアウト</button></p></ng-template>
-<ng-template #elseBlock><p><button ion-button full (click)="doGoogleLogin()">Google ログイン</button></p></ng-template>
-
-<br>
-<br>
-
-<ng-container>
   <ion-item>
-    確認コードを発行する方はこちら
+    ログイン
   </ion-item>
-  <p><button ion-button full [disabled]="!isLoggedIn()" (click)="createPinCode()">発行する</button></p>
-  <p *ngIf="!isLoggedIn()">ログインすると、確認コードが発行できます。</p>
-  <p>確認コードを発行すると、<br>みんなでリストの管理ができるようになります。</p>
-</ng-container>
+  <!-- <div *ngIf="isLoggedIn(); then thenBlock; else elseBlock"></div>
+  <ng-template #thenBlock> -->
+    <p><button ion-button full round (click)="logout()">ログアウト</button></p>
+  <!-- </ng-template>
+  <ng-template #elseBlock>
+    <p><button ion-button full (click)="doGoogleLogin()">Google ログイン</button></p>
+  </ng-template> -->
+  <br>
+  <br>
 
-<br><br>
+  <ng-container>
+    <ion-item>
+      確認コードを発行する方はこちら
+    </ion-item>
+    <p><button ion-button full round (click)="createPinCode()">発行する</button></p>
+    <p class="description">確認コードを発行すると、複数人でリストの管理ができるようになります。</p>
+  </ng-container>
 
-<ion-item>
-  確認コードを教えてもらった方はこちら
-</ion-item>
-<p><button ion-button full (click)="setPinCode()">確認コードを入力する</button></p>
+  <br>
+  <br>
 
+  <ion-item>
+    確認コードを教えてもらった方はこちら
+  </ion-item>
+  <!-- <div *ngIf="isConnected(); then then2Block; else else2Block"></div> -->
+  <!-- <ng-template #then2Block>
+    <p><button ion-button full (click)="disconnect()">連携解除</button></p>
+  </ng-template> -->
+  <!-- <ng-template #else2Block> -->
+    <p><button ion-button full round (click)="setPinCode()">確認コードを入力する</button></p>
+  <!-- </ng-template> -->
+  <p class="description">確認コードを登録すると、あなたの登録情報は削除され、<br>確認コードを発行した方の登録情報が表示されます。</p>
 </ion-content>

@@ -1,7 +1,8 @@
 import { Component, TestabilityRegistry } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController, AlertController, SelectPopover } from 'ionic-angular';
 import * as firebase from 'firebase';
 import { AngularFireAuth } from 'angularfire2/auth';
+import { auth } from 'firebase/app';
 
 import { User } from '../../model/user';
 import { TabsPage } from '../tabs/tabs';
@@ -34,11 +35,9 @@ export class SigninPage {
 
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        // 匿名ユーザでログイン済みのため、ページ遷移
+        // ログイン済みのため、ページ遷移
         this.navCtrl.setRoot(TabsPage);
         return;
-      } else {
-        // 初期ページを表示
       }
     });
   }
@@ -51,68 +50,98 @@ export class SigninPage {
   ngOnInit() {
   }
 
-  async signIn(user: User) {
-    this.afAuth.auth.signInAndRetrieveDataWithEmailAndPassword(user.email, user.password)
-    .then(res => {
-      if (res.user.email && res.user.uid) {
-        this.navCtrl.setRoot(TabsPage);
+  // async signIn(user: User) {
+  //   this.afAuth.auth.signInAndRetrieveDataWithEmailAndPassword(user.email, user.password)
+  //   .then(res => {
+  //     if (res.user.email && res.user.uid) {
+  //       this.navCtrl.setRoot(TabsPage);
 
-        this.toast.create({
-          message: 'Welcome to APP_NAME',
-          duration: 3000
-        }).present();
-      } else {
-        this.toast.create({
-          message: 'Could no find authentication details.',
-          duration: 3000
-        }).present();
-      }
+  //       this.toast.create({
+  //         message: 'Welcome to APP_NAME',
+  //         duration: 3000
+  //       }).present();
+  //     } else {
+  //       this.toast.create({
+  //         message: 'Could no find authentication details.',
+  //         duration: 3000
+  //       }).present();
+  //     }
+  //   })
+  //   .catch(err => {
+  //     this.toast.create({
+  //       message: 'Login Id and Password do not match',
+  //       duration: 3000
+  //     }).present();
+  //   })
+  // }
+
+  doGoogleLogin(){
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
+    .then(() => {
+      // console.log('a');
+      return firebase.auth().signInWithRedirect(new auth.GoogleAuthProvider());
+      // return firebase.auth().signInWithPopup(new auth.GoogleAuthProvider());
     })
-    .catch(err => {
-      this.toast.create({
-        message: 'Login Id and Password do not match',
-        duration: 3000
-      }).present();
-    })
-  }
+    .then(() => {
+      // console.log('b');
+      // let user = firebase.auth().currentUser;
+      // while(!user) {
 
-  guest() {
-    firebase.auth().signInAnonymously().catch((error) => {
-      // Handle Errors here.
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      // ...
+      // }
+      // const asyncAwait = async () => {
+      //   const aa1 = await asyncAwait1(0)
+      //   const aa2 = await asyncAwait2(aa1)
+      //   const aa3 = await asyncAwait3(aa2)
+      //   const sum = aa3
+      //   console.log(aa3);
+      // }
+
+      // const asyncAwait1 = async (num) => {
+      //   return await num + 1
+      // }
+
+      // const asyncAwait2 = async (num) => {
+      //     return await num + 2
+      // }
+
+      // const asyncAwait3 = async (num) => {
+      //     return await num + 3
+      // }
+
+      // asyncAwait().catch(error => { console.log(error) });
     });
-
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        // User is signed in.
-        var isAnonymous = user.isAnonymous;
-        var uid = user.uid;
-        console.log(user);
-
-        this.navCtrl.setRoot(TabsPage);
-        // ...
-      } else {
-        // User is signed out.
-        // ...
-      }
-      // ...
-    });
-
-    // var credential = firebase.auth.EmailAuthProvider.credential(email, password);
-
-    // firebase.auth().currentUser.linkAndRetrieveDataWithCredential(credential).then(function(usercred) {
-    //   var user = usercred.user;
-    //   console.log("Anonymous account successfully upgraded", user);
-    // }, function(error) {
-    //   console.log("Error upgrading anonymous account", error);
-    // });
   }
 
-  signUp() {
-    this.navCtrl.push('signup');
-  }
+  /**
+   * 匿名ユーザでログイン
+   *
+   * @memberof SigninPage
+   */
+  // guest() {
+  //   firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
+  //   .then(() => {
+
+  //     firebase.auth().signInAnonymously().catch((error) => {
+  //       var errorCode = error.code;
+  //       var errorMessage = error.message;
+  //     });
+
+  //     firebase.auth().onAuthStateChanged((user) => {
+  //       if (user) {
+  //         var isAnonymous = user.isAnonymous;
+  //         var uid = user.uid;
+  //         console.log('匿名ユーザでログインしました');
+  //         console.log(user);
+  //         this.navCtrl.setRoot(TabsPage);
+  //       } else {
+  //       }
+  //     });
+  //   });
+  // }
+
+  // signUp() {
+  //   this.navCtrl.push('signup');
+  // }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad SigninPage');

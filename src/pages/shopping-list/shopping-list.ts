@@ -43,11 +43,14 @@ export class ShoppingListPage {
   public spaceIcons = appConfig.spaceIcons;
 
   public user: firebase.User;
+  public gid: string;
 
-  constructor(public navCtrl: NavController,
-    public actionSheetCtrl: ActionSheetController) {
-    this.user = firebase.auth().currentUser;
-    if (!this.user) this.navCtrl.setRoot(SigninPage);
+  public constructor(public navCtrl: NavController,
+    public navParams: NavParams,
+    public actionSheetCtrl: ActionSheetController,
+    public afDB: AngularFireDatabase) {
+      this.user = firebase.auth().currentUser;
+      if (!this.user) this.navCtrl.setRoot(SigninPage);
   }
 
   /**
@@ -56,23 +59,37 @@ export class ShoppingListPage {
    * @memberof StocksPage
    */
   initializeItems() {
-    this.filteredItems = [];
-    firebase.database().ref("stocks/" + this.user.uid)
-    .orderByChild("usage").equalTo(1)
-    .on('value', resp => {
-      this.items = [];
+
+    // this.gid = this.user.uid;
+    firebase.database().ref("users/" + this.user.uid)
+    .once('value', resp => {
+      let g:string = '';
       resp.forEach(childSnapshot => {
-        const item = childSnapshot.val();
-        item.key = childSnapshot.key;
-        this.items.push(item);
+        g = childSnapshot.key;
       });
-      if (this.selectedSpace !== this.spaces[0]) {
-        this.filteredItems = this.filteredItems.filter((item) => {
-          return item.space === this.selectedSpace;
+      this.gid = g;
+
+      console.log("stocks/" + this.gid + "?usage=1");
+
+      this.filteredItems = [];
+      firebase.database().ref("stocks/" + this.gid)
+      .orderByChild("usage").equalTo(1)
+      .on('value', resp2 => {
+        this.items = [];
+        resp2.forEach(childSnapshot2 => {
+          const item = childSnapshot2.val();
+          item.key = childSnapshot2.key;
+          this.items.push(item);
         });
-      } else {
-        this.filteredItems = this.items;
-      }
+
+        if (this.selectedSpace !== this.spaces[0]) {
+          this.filteredItems = this.filteredItems.filter((item) => {
+            return item.space === this.selectedSpace;
+          });
+        } else {
+          this.filteredItems = this.items;
+        }
+      });
     });
   };
 
@@ -111,7 +128,7 @@ export class ShoppingListPage {
           text: '買った',
           handler: () => {
             console.log('買った');
-            firebase.database().ref('stocks/' + this.user.uid + '/' + item.key).update({
+            firebase.database().ref('stocks/' + this.gid + '/' + item.key).update({
               usage: 0
             });
           }
@@ -125,7 +142,7 @@ export class ShoppingListPage {
           text: 'もう買わない',
           handler: () => {
             console.log('もう買わない');
-            firebase.database().ref('stocks/' + this.user.uid + '/' + item.key).remove();
+            firebase.database().ref('stocks/' + this.gid + '/' + item.key).remove();
           }
         }, {
           text: '内容をかえたい',
@@ -133,11 +150,6 @@ export class ShoppingListPage {
             console.log('内容を変える');
             this.navCtrl.push('EditShoppingListPage', item.key);
           }
-        // }, {
-        //   text: 'なにもしない',
-        //   handler: () => {
-        //     console.log('なにもしない');
-        //   }
         }
       ]
     });
@@ -155,8 +167,6 @@ export class ShoppingListPage {
     const val = ev.target.value;
 
     console.log(val + 'で絞り込みを行います');
-
-    // this.initializeItems();
 
     if (val && val.trim() != '') {
       this.filteredItems = this.items.filter((item) => {

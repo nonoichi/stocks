@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ActionSheetController } from 'ionic-angular';
 import * as firebase from 'firebase';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { appConfig } from '../../config/app';
 import { SigninPage } from '../signin/signin';
 import { TabsPage } from '../tabs/tabs';
+import { AngularFireDatabase } from 'angularfire2/database';
 
 /**
  * Generated class for the EditStockPage page.
@@ -31,11 +32,15 @@ export class EditStockPage implements OnInit {
 
   public data: { name: string, space: string, category: string, memo: string } = { name: '', space: '', category: '', memo: '' };
 
-  private item_key = "";
+  public item_key: string;
   public user: firebase.User;
+  public gid: string;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-    console.log(navParams);
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public actionSheetCtrl: ActionSheetController,
+    public afDB: AngularFireDatabase) {
     this.user = firebase.auth().currentUser;
     if (!this.user) this.navCtrl.setRoot(SigninPage);
 
@@ -57,12 +62,21 @@ export class EditStockPage implements OnInit {
       usage: new FormControl('', []),
     });
 
-    firebase.database().ref('stocks/' +  this.user.uid + '/' + this.item_key).once('value', resp => {
-      this.form['name'] = resp.val().name;
-      this.form['category'] = resp.val().category;
-      this.form['space'] = resp.val().space;
-      this.form['memo'] = resp.val().memo;
-      this.form['usage'] = resp.val().usage;
+    firebase.database().ref("users/" + this.user.uid)
+    .once('value', resp => {
+      let g:string = '';
+      resp.forEach(childSnapshot => {
+        g = childSnapshot.key;
+      });
+      this.gid = g;
+
+      firebase.database().ref('stocks/' +  g + '/' + this.item_key).once('value', resp => {
+        this.form['name'] = resp.val().name;
+        this.form['category'] = resp.val().category;
+        this.form['space'] = resp.val().space;
+        this.form['memo'] = resp.val().memo;
+        this.form['usage'] = resp.val().usage;
+      });
     });
   }
 
@@ -76,7 +90,7 @@ export class EditStockPage implements OnInit {
   updateStock() {
     console.log('update stock data.');
 
-    firebase.database().ref('stocks/' + this.user.uid + '/' + this.item_key).update({
+    firebase.database().ref('stocks/' + this.gid + '/' + this.item_key).update({
       name: this.editform.value.name,
       space: this.editform.value.space,
       category: this.editform.value.category,

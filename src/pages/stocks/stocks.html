@@ -7,11 +7,11 @@
 <ion-header>
   <ion-navbar no-border-bottom>
     <ion-title>かったもの</ion-title>
-    <ion-buttons start>
+    <!-- <ion-buttons start>
       <button ion-button icon-only (click)="addStock()">
         <ion-icon name="add"></ion-icon>
       </button>
-    </ion-buttons>
+    </ion-buttons> -->
   </ion-navbar>
   <ion-toolbar no-border-top>
     <ion-segment [(ngModel)]="space">
@@ -23,15 +23,9 @@
 </ion-header>
 
 <ion-content padding>
-    <!-- <ion-fab bottom right>
-      <button ion-fab mini (click)="addStock()"><ion-icon name="add"></ion-icon></button>
-      <ion-fab-list>
-        <button ion-fab><ion-icon name="logo-facebook"></ion-icon></button>
-        <button ion-fab><ion-icon name="logo-twitter"></ion-icon></button>
-        <button ion-fab><ion-icon name="logo-vimeo"></ion-icon></button>
-        <button ion-fab><ion-icon name="logo-googleplus"></ion-icon></button>
-      </ion-fab-list>
-    </ion-fab> -->
+    <ion-fab bottom right>
+      <button ion-fab (click)="addStock()"><ion-icon name="add"></ion-icon></button>
+    </ion-fab>
     <div>
       <ion-list>
         <ion-searchbar (ionInput)="getItems($event)" placeholder="商品名、メモ"></ion-searchbar>

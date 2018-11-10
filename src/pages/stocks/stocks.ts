@@ -6,7 +6,7 @@ import { StockInfo } from './model/stock-info';
 import { appConfig } from '../../config/app';
 
 import { AngularFireDatabase } from 'angularfire2/database';
-import { Observable } from 'rxjs/Observable';
+// import { Observable } from 'rxjs/Observable';
 import { SigninPage } from '../signin/signin';
 
 /**
@@ -40,13 +40,17 @@ export class StocksPage {
   public spaces: string[] = appConfig.spaces;
 
   public user: firebase.User;
+  public gid: string;
 
   public constructor(public navCtrl: NavController,
     public navParams: NavParams,
     public actionSheetCtrl: ActionSheetController,
     public afDB: AngularFireDatabase) {
       this.user = firebase.auth().currentUser;
-      if (!this.user) this.navCtrl.setRoot(SigninPage);
+      if (this.user === null) {
+        this.navCtrl.setRoot(SigninPage);
+        return;
+      }
   }
 
   /**
@@ -55,24 +59,36 @@ export class StocksPage {
    * @memberof StocksPage
    */
   initializeItems() {
-    this.filteredItems = [];
-    firebase.database().ref("stocks/" + this.user.uid)
-    .orderByChild("usage").equalTo(0)
-    .on('value', resp => {
-      this.items = [];
-      resp.forEach(childSnapshot => {
-        const item = childSnapshot.val();
-        item.key = childSnapshot.key;
-        this.items.push(item);
-      });
 
-      if (this.selectedSpace !== this.spaces[0]) {
-        this.filteredItems = this.filteredItems.filter((item) => {
-          return item.space === this.selectedSpace;
+    firebase.database().ref("users/" + this.user.uid)
+    .once('value', resp => {
+      let g:string = '';
+      resp.forEach(childSnapshot => {
+        g = childSnapshot.key;
+      });
+      this.gid = g;
+
+      console.log("stocks/" + this.gid + "?usage=0");
+
+      this.filteredItems = [];
+      firebase.database().ref("stocks/" + this.gid)
+      .orderByChild("usage").equalTo(0)
+      .on('value', resp2 => {
+        this.items = [];
+        resp2.forEach(childSnapshot2 => {
+          const item = childSnapshot2.val();
+          item.key = childSnapshot2.key;
+          this.items.push(item);
         });
-      } else {
-        this.filteredItems = this.items;
-      }
+
+        if (this.selectedSpace !== this.spaces[0]) {
+          this.filteredItems = this.filteredItems.filter((item) => {
+            return item.space === this.selectedSpace;
+          });
+        } else {
+          this.filteredItems = this.items;
+        }
+      });
     });
   }
 
@@ -110,7 +126,7 @@ export class StocksPage {
           text: '空になった',
           handler: () => {
             console.log('空になった');
-            firebase.database().ref('stocks/' + this.user.uid + '/' + item.key).update({
+            firebase.database().ref('stocks/' + this.gid + '/' + item.key).update({
               usage: 1
             });
           }
@@ -118,7 +134,7 @@ export class StocksPage {
           text: 'もう買わない',
           handler: () => {
             console.log('もう買わない');
-            firebase.database().ref('stocks/' + this.user.uid + '/' + item.key).remove();
+            firebase.database().ref('stocks/' + this.gid + '/' + item.key).remove();
           }
         }, {
           text: '内容をかえたい',
@@ -126,11 +142,6 @@ export class StocksPage {
             console.log('内容を変える');
             this.navCtrl.push('EditStockPage', item.key);
           }
-        // }, {
-        //   text: 'なにもしない',
-        //   handler: () => {
-        //     console.log('なにもしない');
-        //   }
         }
       ]
     });
@@ -147,8 +158,6 @@ export class StocksPage {
     const val = ev.target.value;
 
     console.log(val + 'で絞り込みを行います');
-
-    // this.initializeItems();
 
     if (val && val.trim() != '') {
       this.filteredItems = this.items.filter((item) => {

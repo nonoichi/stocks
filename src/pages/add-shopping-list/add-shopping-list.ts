@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ActionSheetController } from 'ionic-angular';
 import * as firebase from 'firebase';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { appConfig } from '../../config/app';
+import { SigninPage } from '../signin/signin';
+import { AngularFireDatabase } from 'angularfire2/database';
 
 /**
  * Generated class for the AddShoppingListPage page.
@@ -26,7 +28,16 @@ export class AddShoppingListPage {
 
   public data: { name: string, space: string, category: string, memo: string } = { name: '', space: '', category: '', memo: '' };
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  public user: firebase.User;
+  public gid: string;
+
+  constructor(
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public actionSheetCtrl: ActionSheetController,
+    public afDB: AngularFireDatabase) {
+    this.user = firebase.auth().currentUser;
+    if (!this.user) this.navCtrl.setRoot(SigninPage);
   }
 
   /**
@@ -52,12 +63,21 @@ export class AddShoppingListPage {
   registShoppingList() {
     console.log('アイテムを追加します');
 
-    firebase.database().ref('stocks/').push({
-        name: this.addform.value.name,
-        space: this.addform.value.space,
-        category: this.addform.value.category,
-        memo: this.addform.value.memo,
-        usage: this.usages[1]
+    firebase.database().ref("users/" + this.user.uid)
+    .once('value', resp => {
+      let g:string = '';
+      resp.forEach(childSnapshot => {
+        g = childSnapshot.key;
+      });
+      this.gid = g;
+
+      firebase.database().ref('stocks/' + g).push({
+          name: this.addform.value.name,
+          space: this.addform.value.space,
+          category: this.addform.value.category,
+          memo: this.addform.value.memo,
+          usage: this.usages[1]
+      });
     });
 
     this.navCtrl.pop();
